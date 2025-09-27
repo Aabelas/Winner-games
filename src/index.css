@@ -1,3 +1,373 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* index.css
+   Mobile-first, responsive, modern UI for the App.jsx you have.
+   Tweak :root variables to change theme.
+*/
+
+/* ===================
+   Theme variables
+   =================== */
+:root{
+  --bg:#0f1724;             /* app background */
+  --panel:#0e1a2b;          /* card background */
+  --glass: rgba(255,255,255,0.06);
+  --muted: #97a0b5;
+  --accent: #ff7a59;        /* primary accent */
+  --accent-2: #ffb86b;      /* gradient second color */
+  --success: #4ade80;
+  --danger: #ff6b6b;
+  --text: #e6eef8;
+  --shadow: 0 8px 30px rgba(2,6,23,0.6);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+  --container-w: 460px;
+  --glass-blur: 8px;
+  --transition: 240ms cubic-bezier(.2,.9,.3,1);
+  --safe-gap: 16px;
+  --nav-height: 84px;
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* ===================
+   Base
+   =================== */
+*{box-sizing:border-box}
+html,body,#root {height:100%}
+body{
+  margin:0;
+  font-family:var(--font-sans);
+  background: linear-gradient(180deg, #061022 0%, var(--bg) 100%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.25;
+  padding:24px 12px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+/* central app wrapper (keeps app narrow on desktop) */
+.app-container{
+  width:100%;
+  max-width:var(--container-w);
+  margin: 0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* subtle card base */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+/* small utility */
+.row { display:flex; gap:12px; align-items:center; }
+.col { display:flex; flex-direction:column; gap:8px; }
+
+/* ===================
+   Top section: Balance + Winners
+   =================== */
+.top-section {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* balance card */
+.balance-section {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  border-radius:var(--radius-lg);
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: 0 10px 30px rgba(2,6,23,0.55);
+}
+
+.balance-section h2{
+  margin:0;
+  font-size:1.125rem;
+  letter-spacing:0.2px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.balance-buttons {
+  display:flex;
+  gap:8px;
+}
+
+.deposit-btn, .withdraw-btn {
+  font-weight:600;
+  border:0;
+  padding:8px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:transform var(--transition), box-shadow var(--transition);
+  font-size:0.92rem;
+}
+
+/* deposit: gradient primary */
+.deposit-btn {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color:#081220;
+  box-shadow: 0 8px 18px rgba(255,122,89,0.14);
+}
+.deposit-btn:hover { transform:translateY(-3px); box-shadow: 0 18px 32px rgba(255,122,89,0.18); }
+
+/* withdraw: outline */
+.withdraw-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color:var(--text);
+}
+.withdraw-btn:hover { transform:translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,0.4); }
+
+/* winners card */
+.winners-section {
+  padding:12px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  overflow:hidden;
+}
+
+.winners-section h3 {
+  margin:0;
+  font-size:0.98rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* horizontal scroll ticker for winners */
+.winners-list{
+  margin:0;
+  padding:0;
+  display:flex;
+  gap:14px;
+  list-style:none;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+.winners-list li{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:8px 12px;
+  border-radius:12px;
+  min-width:110px;
+  font-size:0.86rem;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  white-space:nowrap;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+}
+
+/* small green dot and prize */
+.winners-list li::before{
+  content:"";
+  width:8px;height:8px;border-radius:50%;
+  background:var(--success);
+  display:inline-block;
+  margin-right:6px;
+}
+
+/* ===================
+   Daily Bonus Section
+   =================== */
+.daily-bonus-section {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:8px;
+}
+
+/* main claim button */
+.daily-bonus-btn {
+  width:100%;
+  max-width:360px;
+  border:0;
+  padding:14px 18px;
+  border-radius:14px;
+  font-weight:700;
+  font-size:1.05rem;
+  cursor:pointer;
+  background: linear-gradient(90deg, #ffd89b, #ff7a59);
+  color:#081220;
+  box-shadow: 0 14px 36px rgba(255,122,89,0.14);
+  transform-origin:center;
+  animation: float 6s ease-in-out infinite;
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+}
+
+/* pulse halo for attention */
+.daily-bonus-btn::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  width:120%;
+  height:120%;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:16px;
+  background: radial-gradient(circle, rgba(255,122,89,0.12), transparent 40%);
+  opacity:0.92;
+  filter:blur(18px);
+}
+
+/* claimed state */
+.claimed-text {
+  color:var(--muted);
+  font-weight:600;
+}
+
+/* disabled look */
+.daily-bonus-btn[disabled], .daily-bonus-btn.disabled{
+  opacity:0.55;
+  cursor:default;
+  transform:none;
+  box-shadow:none;
+  animation:none;
+}
+
+/* floating animation */
+@keyframes float {
+  0%,100%{ transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ===================
+   Game section (main content)
+   =================== */
+.game-section {
+  padding:16px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  min-height:220px;
+}
+
+/* placeholder game card (replace with actual game UI) */
+.game-section h2{ margin:0; font-size:1.1rem; }
+
+/* ===================
+   Bottom mini buttons (like Hulu games)
+   =================== */
+.mini-buttons-section {
+  position:sticky;
+  bottom:12px;
+  left:0;
+  right:0;
+  width: calc(100% - 24px);
+  margin:0 auto;
+  display:flex;
+  gap:12px;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 18px 40px rgba(2,6,23,0.65);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+/* fallback selector for older class names */
+.mini-buttons, .mini-buttons-section { display:flex; gap:12px; }
+
+/* mini button style */
+.mini-btn {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:center;
+  justify-content:center;
+  padding:10px 6px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:0.92rem;
+  cursor:pointer;
+  border:0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+}
+
+/* emphasize main (Play) with accent */
+.mini-btn:first-child {
+  background: linear-gradient(180deg,#ff8f6b,#ff5f3a);
+  color:#061220;
+  box-shadow: 0 10px 30px rgba(255,95,58,0.22);
+  transform: translateY(-6px);
+}
+
+/* hover states */
+.mini-btn:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,0.5); }
+
+/* icon style */
+.icon {
+  display:inline-flex;
+  width:36px;height:36px;
+  align-items:center;justify-content:center;
+  font-size:1.1rem;
+  border-radius:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+}
+
+/* ===================
+   Responsive layout
+   =================== */
+@media (min-width:720px){
+  .top-section {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:14px;
+    align-items:start;
+  }
+
+  .balance-section { padding:18px; }
+  .winners-section { padding:18px; }
+  .mini-buttons-section { width: calc(100% - 48px); padding:12px 16px; border-radius: 20px; }
+}
+
+@media (min-width:980px) {
+  body{ padding-top:32px; }
+  .app-container { max-width:720px; }
+}
+
+/* ===================
+   Extras & utilities
+   =================== */
+.small { font-size:0.82rem; color:var(--muted); }
+.center { text-align:center; }
+
+/* scrollbar for winners list (subtle) */
+.winners-list::-webkit-scrollbar { height:8px; }
+.winners-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.03); border-radius:8px; }
+
+/* tiny responsive helper for very small screens */
+@media (max-width:340px) {
+  .deposit-btn,.withdraw-btn { padding:6px 8px; font-size:0.85rem; }
+  .mini-buttons-section { padding:8px; gap:8px; }
+}
