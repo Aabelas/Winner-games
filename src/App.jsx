@@ -1,232 +1,168 @@
-import React, { useState, useEffect } from "react";
-
-const gamesList = ["Aviator", "Chicken Road", "Keno", "Coin Flip", "Fast Keno", "JetX"];
-const rewardOptions = ["Treasure Box 📦", "Spin 🎡"];
-const walletMethods = ["Telebirr", "Bank Transfer", "Mpesa"];
-
-function AnimatedTrophy() {
-  return <span className="animate-bounce text-yellow-400 text-3xl mr-2">🏆</span>;
+/* ---------- Basic Reset ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; }
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, #0b0b12 0%, #120817 100%);
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-bottom: 76px; /* space for bottom nav */
 }
 
-function Header({ balance, onDepositClick, onWithdrawClick }) {
-  return (
-    <div className="flex flex-col md:flex-row justify-between items-center p-4 bg-gradient-to-r from-neonBlue to-neonGold rounded-xl shadow-lg text-white mb-6 max-w-5xl mx-auto">
-      <div className="flex items-center">
-        <AnimatedTrophy />
-        <h1 className="text-3xl font-extrabold mr-4">WINNER GAMES</h1>
-      </div>
-      <div className="flex flex-col md:flex-row items-center space-x-0 md:space-x-4">
-        <div className="mb-2 md:mb-0">Balance: <span className="font-bold text-yellow-300">${balance.toFixed(2)}</span></div>
-        <button onClick={onDepositClick} className="bg-cyan-400 hover:bg-cyan-600 text-black font-semibold px-4 py-2 rounded-full mx-2">Deposit</button>
-        <button onClick={onWithdrawClick} className="bg-purple-500 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-full mx-2">Withdraw</button>
-      </div>
-    </div>
-  );
+/* ---------- Header ---------- */
+.header {
+  max-width: 980px;
+  margin: 18px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  gap: 12px;
 }
 
-function ButtonGrid({ onButtonClick }) {
-  const buttons = [
-    { name: "Play Games", emoji: "🎮", id: "games" },
-    { name: "Wallet", emoji: "👝", id: "wallet" },
-    { name: "Rewards", emoji: "🎁", id: "rewards" },
-    { name: "Refer & Earn", emoji: "🔗", id: "invite" },
-    { name: "Support", emoji: "🆘", id: "support" },
-    { name: "Daily Bonus", emoji: "🔥", id: "daily-bonus" }
-  ];
-
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto px-4">
-      {buttons.map(({name, emoji, id}) => (
-        <button
-          key={id}
-          onClick={() => onButtonClick(id)}
-          className="bg-gray-700 text-white py-6 rounded-xl flex flex-col justify-center items-center font-semibold text-lg shadow hover:scale-105 transition transform ease-in-out"
-        >
-          <span className="text-3xl mb-2">{emoji}</span>
-          {name}
-        </button>
-      ))}
-    </div>
-  );
+.header-left { display:flex; align-items:center; gap:12px; }
+.trophy-btn {
+  background: linear-gradient(135deg,#ffd24d,#ff9a00);
+  border-radius: 12px;
+  width:60px; height:60px;
+  display:flex; align-items:center; justify-content:center;
+  border:none; cursor:pointer;
+  box-shadow: 0 6px 18px rgba(255,165,0,0.25);
+  animation: trophy-bounce 2.2s ease-in-out infinite;
+}
+.trophy { font-size:28px; transform: translateY(0); }
+@keyframes trophy-bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px) rotate(-6deg); }
 }
 
-function Modal({ children, onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50">
-      <div className="bg-gray-900 rounded-xl p-6 max-w-md w-full shadow-lg relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-white text-xl font-bold hover:text-red-600">&times;</button>
-        {children}
-      </div>
-    </div>
-  );
+.title-block { line-height: 1; }
+.main-title {
+  font-size: 20px;
+  color: #ffd24d;
+  text-shadow: 0 6px 18px rgba(255, 200, 0, 0.14);
+  font-weight:800;
+}
+.subtitle { color: #7ef0ff; font-size: 12px; opacity:0.95; margin-top:4px; }
+
+/* Wallet on right */
+.wallet-btn {
+  display:flex; align-items:center; gap:8px;
+  background: linear-gradient(180deg,#141227,#1b1930);
+  padding: 8px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.03);
+  cursor:pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.wallet-emoji { font-size:20px; }
+.balance-info { display:flex; flex-direction:column; }
+.balance-label { font-size:11px; color:#b8c7d6; }
+.balance-amount { font-weight:700; color:#ffe08a; font-size:16px; }
+
+/* Daily bonus */
+.daily-section { max-width: 980px; margin: 8px auto; padding: 0 12px; }
+.daily-card {
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px;
+  background: linear-gradient(180deg,#161428,#23162d);
+  border-radius:14px;
+  padding:12px;
+  box-shadow: 0 8px 30px rgba(80,20,160,0.08);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.daily-left { display:flex; gap:12px; align-items:center; }
+.daily-emoji { font-size:28px; transform: translateY(0); }
+.daily-title { font-weight:700; color:#ffcd6a; }
+.cashback-note { font-size:12px; color:#bcd9e0; opacity:0.9; margin-top:2px; }
+.countdown {
+  font-weight:800; font-size:18px;
+  background: linear-gradient(90deg,#ffb84d,#ffd24d);
+  color:#081018; padding:8px 12px; border-radius:10px;
+  box-shadow: 0 10px 30px rgba(255,160,0,0.12);
 }
 
-function GamesModal({ onClose }) {
-  return (
-    <Modal onClose={onClose}>
-      <h2 className="text-2xl mb-4 font-bold text-center text-yellow-400">Games List</h2>
-      <div className="grid grid-cols-2 gap-4">
-        {gamesList.map(game => (
-          <button key={game} onClick={() => alert("Coming Soon")} className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl py-3 font-semibold hover:scale-105 transition">{game}</button>
-        ))}
-      </div>
-    </Modal>
-  );
+/* ---------- Grid buttons ---------- */
+.grid-wrap {
+  max-width: 980px;
+  margin: 16px auto;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  padding: 0 12px 40px 12px;
+}
+.grid-btn {
+  border-radius: 14px;
+  padding: 18px 10px;
+  min-height: 110px;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:8px;
+  color:#fff; font-weight:700; font-size:14px;
+  border: 1px solid rgba(255,255,255,0.04);
+  cursor:pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.45);
 }
 
-function RewardsModal({ onClose }) {
-  return (
-    <Modal onClose={onClose}>
-      <h2 className="text-2xl mb-4 font-bold text-center text-yellow-400">Rewards</h2>
-      <div className="grid grid-cols-2 gap-4">
-        {rewardOptions.map(op => (
-          <button key={op} onClick={() => alert("Coming Soon")} className="bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl py-3 font-semibold hover:scale-105 transition">{op}</button>
-        ))}
-      </div>
-    </Modal>
-  );
+/* individual colors */
+.grid-btn .grid-emoji { font-size:28px; }
+.sky { background: linear-gradient(135deg,#0fb8f4,#0a7bd9); box-shadow: 0 8px 30px rgba(10,123,217,0.22); }
+.gold { background: linear-gradient(135deg,#ffb84d,#ff7a00); box-shadow: 0 8px 30px rgba(255,140,0,0.18); }
+.pink { background: linear-gradient(135deg,#ff7adf,#a94ff7); box-shadow: 0 8px 30px rgba(169,79,247,0.18); }
+.purple { background: linear-gradient(135deg,#7b61ff,#4b2ebf); box-shadow: 0 8px 30px rgba(75,46,191,0.18); }
+.coral { background: linear-gradient(135deg,#ff6b6b,#ff9a9e); box-shadow: 0 8px 30px rgba(255,100,100,0.16); }
+.violet { background: linear-gradient(135deg,#9b59ff,#6a5cff); box-shadow: 0 8px 30px rgba(155,89,255,0.18); }
+
+.grid-btn:active { transform: translateY(3px); }
+.grid-btn:hover { transform: scale(1.03); }
+
+/* ---------- Bottom nav ---------- */
+.bottom-nav {
+  position: fixed; left:0; right:0; bottom:0;
+  height:64px; background: linear-gradient(180deg,#0b0b12,#0a0710);
+  display:flex; justify-content:space-around; align-items:center;
+  border-top:1px solid rgba(255,255,255,0.02);
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+}
+.nav-btn { background:transparent; border:none; color:#84f0ff; display:flex; flex-direction:column; align-items:center; gap:2px; font-weight:700; font-size:12px; cursor:pointer; }
+.nav-btn span { font-size:11px; color:#bfeff7; margin-top:2px; }
+
+/* ---------- Modal ---------- */
+.modal-container.hidden { display:none; }
+.modal-container {
+  position: fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background: rgba(0,0,0,0.6); z-index:999;
+  padding: 18px;
+}
+.modal {
+  width: 100%; max-width:420px;
+  background: linear-gradient(180deg,#0e0e16,#161221);
+  border-radius:14px; padding:16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.modal h3 { color:#ffd24d; font-size:18px; margin-bottom:10px; }
+.modal p { color:#cde8ef; font-size:13px; margin-bottom:10px; }
+.modal .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+.modal .small-btn {
+  padding:10px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:700;
+  color:#081018;
 }
 
-function WalletModal({ onClose }) {
-  const [stage, setStage] = useState("main");
+/* Coming soon style */
+.small-btn.coming { background: linear-gradient(90deg,#ffd24d,#ff7a00); }
 
-  return (
-    <Modal onClose={onClose}>
-      {stage === "main" && <>
-        <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center">Wallet</h2>
-        <div className="flex flex-col space-y-4">
-          <button onClick={() => setStage("deposit")} className="bg-green-600 hover:bg-green-700 rounded-xl py-2 font-semibold text-white">Deposit</button>
-          <button onClick={() => setStage("withdraw")} className="bg-red-600 hover:bg-red-700 rounded-xl py-2 font-semibold text-white">Withdraw</button>
-        </div>
-      </>}
-      {stage === "deposit" && <WalletMethodSelector onBack={() => setStage("main")} type="Deposit" />}
-      {stage === "withdraw" && <WalletMethodSelector onBack={() => setStage("main")} type="Withdraw" />}
-    </Modal>
-  );
-}
+/* special small neutral */
+.small-btn.link { background: linear-gradient(90deg,#7ef0ff,#5de0f0); color:#001219; }
 
-function WalletMethodSelector({ onBack, type }) {
-  const walletMethods = ["Telebirr", "Bank Transfer", "Mpesa"];
-  return (
-    <>
-      <h2 className="text-center mb-4 text-yellow-400 font-bold text-xl">{type} Methods</h2>
-      <div className="grid grid-cols-1 gap-4">
-        {walletMethods.map(method => (
-          <button key={method} onClick={() => alert("Coming Soon")} className={`rounded-xl py-2 font-semibold text-white ${type === "Deposit" ? "bg-pink-600 hover:bg-pink-700" : "bg-blue-600 hover:bg-blue-700"}`}>
-            {method}
-          </button>
-        ))}
-      </div>
-      <button className="mt-4 text-white underline text-center" onClick={onBack}>Back</button>
-    </>
-  );
-}
+/* Close */
+.modal .close { position:absolute; right:14px; top:10px; background:transparent; border:none; color:#fff; font-size:20px; cursor:pointer; }
 
-function SupportModal({ onClose }) {
-  return (
-    <Modal onClose={onClose}>
-      <h2 className="text-center text-yellow-400 font-bold text-2xl mb-4">Support</h2>
-      <div className="text-center">
-        <a href="https://t.me/Winnergamehelp" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline font-semibold text-xl">@Winnergamehelp</a>
-      </div>
-    </Modal>
-  );
-}
-
-function InviteModal({ inviteLink, onClose }) {
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(inviteLink);
-    alert("Invite link copied to clipboard!");
-  };
-
-  return (
-    <Modal onClose={onClose}>
-      <h2 className="text-center text-yellow-400 font-bold text-2xl mb-4">Invite & Earn</h2>
-      <div className="bg-gray-800 p-4 rounded-xl text-center break-words mb-4">{inviteLink}</div>
-      <button className="bg-blue-500 hover:bg-blue-600 rounded-xl py-2 px-4 text-white font-semibold" onClick={copyToClipboard}>Copy Link</button>
-    </Modal>
-  );
-}
-
-function DailyBonus({ nextClaimInSeconds }) {
-  const [secondsLeft, setSecondsLeft] = useState(nextClaimInSeconds || 0);
-  useEffect(() => {
-    if(secondsLeft <= 0) return;
-    const interval = setInterval(() => setSecondsLeft(s => (s > 0 ? s - 1 : 0)), 1000);
-    return () => clearInterval(interval);
-  }, [secondsLeft]);
-  
-  const hrs = String(Math.floor(secondsLeft / 3600)).padStart(2, "0");
-  const min = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0");
-  const sec = String(secondsLeft % 60).padStart(2, "0");
-
-  return (
-    <div className="bg-gray-700 rounded-xl text-white p-3 flex items-center justify-between max-w-4xl mx-auto">
-      <span className="text-yellow-400 font-bold text-lg flex items-center gap-2">
-        <span role="img" aria-label="fire">🔥</span> Daily Bonus Available
-      </span>
-      <span className="bg-black rounded-lg py-1 px-3 font-mono text-yellow-400 text-lg">{hrs}:{min}:{sec}</span>
-    </div>
-  );
-}
-
-function BottomNav({ onNavigate }) {
-  const buttons = [
-    { label: "Home", icon: "🏠", id: "home" },
-    { label: "Games", icon: "🎮", id: "games" },
-    { label: "Wallet", icon: "👝", id: "wallet" },
-    { label: "Rewards", icon: "🎁", id: "rewards" },
-    { label: "Help", icon: "🆘", id: "support" }
-  ];
-
-  return (
-    <nav className="fixed bottom-0 left-0 w-full bg-gray-800 text-white flex justify-around p-3 space-x-4 z-40 rounded-t-xl shadow-lg">
-      {buttons.map(({label, icon, id}) => (
-        <button 
-          key={id}
-          onClick={() => onNavigate(id)}
-          className="flex flex-col items-center text-sm font-semibold hover:text-yellow-300 transition"
-        >
-          <span className="text-2xl">{icon}</span>
-          {label}
-        </button>
-      ))}
-    </nav>
-  );
-}
-
-export default function App() {
-  const [balance, setBalance] = useState(500);
-  const [inviteLink, setInviteLink] = useState("https://winnergames.com/ref/USER123");
-  const [modal, setModal] = useState(null);
-  const [dailyBonusTime, setDailyBonusTime] = useState(24 * 60 * 60);
-  const [currentPage, setCurrentPage] = useState("home");
-
-  const handleNavigate = (page) => {
-    if (["games", "wallet", "rewards", "support", "invite"].includes(page)) {
-      setModal(page);
-    } else {
-      setModal(null);
-    }
-    setCurrentPage(page);
-  };
-
-  const onDepositClick = () => setModal("wallet");
-  const onWithdrawClick = () => setModal("wallet");
-
-  return (
-    <>
-      <Header balance={balance} onDepositClick={onDepositClick} onWithdrawClick={onWithdrawClick} />
-      <ButtonGrid onButtonClick={handleNavigate} />
-      <div className="max-w-4xl mx-auto p-4 md:p-0 mt-6">
-        <DailyBonus nextClaimInSeconds={dailyBonusTime} />
-      </div>
-      <BottomNav onNavigate={handleNavigate} />
-      {modal === "games" && <GamesModal onClose={() => setModal(null)} />}
-      {modal === "rewards" && <RewardsModal onClose={() => setModal(null)} />}
-      {(modal === "wallet") && <WalletModal onClose={() => setModal(null)} />}
-      {modal === "support" && <SupportModal onClose={() => setModal(null)} />}
-      {modal === "invite" && <InviteModal inviteLink={inviteLink} onClose={() => setModal(null)} />}
-    </>
-  );
+/* responsive */
+@media (max-width:640px) {
+  .grid-wrap { grid-template-columns: repeat(2,1fr); gap:10px; }
+  .header { padding: 8px; margin: 12px 6px; }
+  .main-title { font-size: 18px; }
+  .daily-card { padding:10px; }
 }
