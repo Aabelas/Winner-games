@@ -1,12 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Winner Game</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Winner Games — Mini App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <button id="trophyBtn" class="trophy-btn" aria-label="Trophy">
+        <span class="trophy">🏆</span>
+      </button>
+      <div class="title-block">
+        <h1 class="main-title">WINNER GAMES</h1>
+        <p class="subtitle">Play more, earn more</p>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button id="walletBtn" class="wallet-btn">
+        <span class="wallet-emoji">👝</span>
+        <div class="wallet-info">
+          <div class="balance-label">Balance</div>
+          <div id="balance" class="balance-amount">50.00</div> <!-- Edit starting balance here -->
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <!-- Daily Bonus -->
+  <section class="daily-section">
+    <div class="daily-card">
+      <div class="daily-left">
+        <div class="daily-emoji">🔥</div>
+        <div>
+          <div class="daily-title">Daily bonus available 🎁</div>
+          <div class="cashback-note">Get 12% back of lost money (last 24h)</div>
+        </div>
+      </div>
+      <div class="daily-right">
+        <div id="countdown" class="countdown">00:00:00</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Grid -->
+  <main class="grid-wrap">
+    <button class="grid-btn sky" data-action="games">
+      <div class="grid-emoji">🎮</div>
+      <div class="grid-label">Play Games</div>
+    </button>
+
+    <button class="grid-btn gold" data-action="wallet">
+      <div class="grid-emoji">👝</div>
+      <div class="grid-label">Wallet</div>
+    </button>
+
+    <button class="grid-btn pink" data-action="rewards">
+      <div class="grid-emoji">🎁</div>
+      <div class="grid-label">Rewards</div>
+    </button>
+
+    <button class="grid-btn purple" data-action="support">
+      <div class="grid-emoji">🆘</div>
+      <div class="grid-label">Support</div>
+    </button>
+
+    <button class="grid-btn coral" data-action="invite">
+      <div class="grid-emoji">🔗</div>
+      <div class="grid-label">Invite</div>
+    </button>
+
+    <button class="grid-btn violet" data-action="spin">
+      <div class="grid-emoji">🎡</div>
+      <div class="grid-label">Spin & Win</div>
+    </button>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-btn" data-action="home">🏠<span>Home</span></button>
+    <button class="nav-btn" data-action="games">🎮<span>Games</span></button>
+    <button class="nav-btn" data-action="wallet">👝<span>Wallet</span></button>
+    <button class="nav-btn" data-action="rewards">🎁<span>Rewards</span></button>
+    <button class="nav-btn" data-action="support">🆘<span>Help</span></button>
+  </nav>
+
+  <!-- Modal container (used for many popups) -->
+  <div id="modalContainer" class="modal-container hidden" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
 </html>
